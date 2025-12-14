@@ -160,13 +160,8 @@ function ContactRevealAnimations(){
 }
 
 function profilObjectRevealAnimation(){
-    profilePic.classList.add('active');
-    p1.classList.add('active');
-    h1.classList.add('active');
-    p2.classList.add('active');
-    cvBtn.classList.add('active');
-    contactBtn.classList.add('active');
-    socials.classList.add('active');
+    const elements = [profilePic, p1, h1, p2, cvBtn, contactBtn, socials];
+    elements.forEach(el => { if (el) el.classList.add('active'); });
 }
 
 

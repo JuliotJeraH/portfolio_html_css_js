@@ -29,20 +29,34 @@
   .hamburger-menu {
     position: relative;
   }
+  /* Anchor the dropdown under the hamburger button on the right, not covering profile */
   .menu-links {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
     left: auto;
-    width: min(80vw, 280px);
-    max-height: 0;
+    transform: none;
+    width: min(36vw, 320px);
+    max-height: 320px;
+    overflow: auto;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     z-index: 999;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
   }
   .menu-links.open {
-    max-height: 240px;
-    padding-bottom: 0.5rem;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0.5rem 0;
+    transform: translateY(0);
+  }
+  .menu-links a {
+    text-align: left;
+    padding: 0.65rem 1rem;
+    display: block;
   }
   #experience,
   .experience-details-container {
@@ -69,6 +83,63 @@
   }
   .about-containers {
     margin-top: 0;
+  }
+}
+
+/* Ensure desktop nav is hidden on small/mobile devices (Android views) */
+@media screen and (max-width: 900px) {
+  #desktop-nav {
+    display: none !important;
+  }
+
+  #hamburger-nav {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    padding: 0 1rem;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+    z-index: 80;
+  }
+
+  /* Anchor dropdown under the hamburger on small screens (right side)
+     so it doesn't overlap the profile picture. */
+  .hamburger-menu {
+    position: relative;
+  }
+  .menu-links {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 1rem;
+    left: auto;
+    width: min(92vw, 320px);
+    max-height: 320px;
+    overflow: auto;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    z-index: 999;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease, max-height 0.35s ease;
+    transform: translateY(-4px);
+  }
+
+  .menu-links.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    padding: 0.5rem 0;
+    max-height: 320px;
+  }
+
+  .menu-links a {
+    text-align: left;
+    padding: 0.65rem 1rem;
+    display: block;
   }
 }
 
