@@ -78,3 +78,132 @@ btnLiveDemo.forEach((button, index) => {
     });
 });
 
+// -------------------- EmailJS contact form -------------------- //
+(function () {
+    if (window.emailjs) {
+        emailjs.init("MDf3DYcSCmpvfsrQ2");
+    }
+})();
+
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validateName(name) {
+        const t = name.trim();
+        // Allow letters, accents, spaces, hyphens and apostrophes; minimum 2 chars
+        return t.length >= 2 && /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(t);
+    }
+
+    function validateMessage(msg) {
+        const t = msg.trim();
+        if (t.length < 10) return false;
+        if (t.length > 2000) return false;
+        // reject obvious scripts
+        if (/(<script\b[^>]*>)/i.test(t)) return false;
+        return true;
+    }
+
+    function clearErrors(form) {
+        form.querySelectorAll('.error').forEach(el => el.textContent = '');
+        const feedback = form.querySelector('.contact-feedback');
+        if (feedback) feedback.textContent = '';
+    }
+
+    function showFeedback(form, message, success = true) {
+        const fb = form.querySelector('.contact-feedback');
+        if (!fb) return;
+        fb.textContent = message;
+        if (success) {
+            fb.style.color = '#1a7f37';
+        } else {
+            fb.style.color = '#c53030';
+        }
+    }
+
+    contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        clearErrors(this);
+
+        const nameInput = this.querySelector('input[name="from_name"]');
+        const emailInput = this.querySelector('input[name="reply_to"]');
+        const msgInput = this.querySelector('textarea[name="message"]');
+        const submitBtn = this.querySelector('button[type="submit"]');
+
+        let valid = true;
+
+        if (!nameInput || !validateName(nameInput.value)) {
+            let err = null;
+            if (nameInput && nameInput.nextElementSibling && nameInput.nextElementSibling.classList.contains('error')) {
+                err = nameInput.nextElementSibling;
+            }
+            if (err) err.textContent = 'Please enter a valid name (2+ letters).';
+            if (valid && nameInput) nameInput.focus();
+            valid = false;
+        }
+
+        if (!emailInput || !validateEmail(emailInput.value)) {
+            let err = null;
+            if (emailInput && emailInput.nextElementSibling && emailInput.nextElementSibling.classList.contains('error')) {
+                err = emailInput.nextElementSibling;
+            }
+            if (err) err.textContent = 'Please enter a valid email address.';
+            if (valid && emailInput) emailInput.focus();
+            valid = false;
+        }
+
+        if (!msgInput || !validateMessage(msgInput.value)) {
+            let err = null;
+            if (msgInput && msgInput.nextElementSibling && msgInput.nextElementSibling.classList.contains('error')) {
+                err = msgInput.nextElementSibling;
+            }
+            if (err) err.textContent = 'Message must be at least 10 characters and must not contain script tags.';
+            if (valid && msgInput) msgInput.focus();
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        // Disable submit button while sending
+        let originalText = '';
+        if (submitBtn) {
+            originalText = submitBtn.textContent;
+        }
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+            submitBtn.setAttribute('aria-busy', 'true');
+        }
+
+        emailjs.sendForm('service_tdi8dra', 'template_p0gczme', this)
+            .then(() => {
+                showFeedback(this, 'Email sent successfully!', true);
+                this.reset();
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText || 'Send';
+                    submitBtn.removeAttribute('aria-busy');
+                }
+                // remove success message after a short timeout
+                setTimeout(() => {
+                    const fb = this.querySelector('.contact-feedback');
+                    if (fb) fb.textContent = '';
+                }, 6000);
+            })
+            .catch(err => {
+                let errMsg = 'Please try again.';
+                if (err && (err.text || err.message)) {
+                    errMsg = err.text || err.message;
+                }
+                showFeedback(this, 'Error sending: ' + errMsg, false);
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText || 'Send';
+                    submitBtn.removeAttribute('aria-busy');
+                }
+            });
+    });
+}
+

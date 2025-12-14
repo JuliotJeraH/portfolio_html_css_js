@@ -251,17 +251,17 @@
         <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow arrow3" />
     </section>
     <section id="contact">
-        <p class="section__text__p1">Get in Touch</p>
-        <h1 class="title">Contact Me</h1>
-        <div class="contact-info-upper-container">
-            <div class="contact-info-container">
-                <img src="./assets/email.png" alt="Email icon" class="icon contact-icon email-icon" />
-                <p><a href="mailto:examplemail@gmail.com">Example@gmail.com</a></p>
-            </div>
-            <div class="contact-info-container">
-                <img src="./assets/linkedin.png" alt="LinkedIn icon" class="icon contact-icon" />
-                <p><a href="https://www.linkedin.com">LinkedIn</a></p>
-            </div>
+        <div class="contact-form-container">
+            <form id="contact-form" class="contact-form">
+                <input type="text" name="from_name" placeholder="Your name" required />
+                <small class="error" aria-live="polite"></small>
+                <input type="email" name="reply_to" placeholder="Your email" required />
+                <small class="error" aria-live="polite"></small>
+                <textarea name="message" placeholder="Your message" required></textarea>
+                <small class="error" aria-live="polite"></small>
+                <button type="submit" class="btn btn-color-1">Send</button>
+                <div class="contact-feedback" aria-live="polite"></div>
+            </form>
         </div>
     </section>
     <footer>
@@ -277,6 +277,7 @@
         </nav>
         <p>Copyright &#169; 2025 Juliot Jera. All Rights Reserved.</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script src="script.js"></script>
 </body>
 
