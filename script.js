@@ -12,9 +12,6 @@ const btnProject2 = document.querySelector('.btnProject2');
 const btnProject3 = document.querySelector('.btnProject3');
 const btnLiveDemo = document.querySelectorAll('.btnLiveDemo');
 
-// Contact form elements
-const contactForm = document.getElementById('contact-form');
-const contactStatus = document.getElementById('contact-status');
 
 // -------------------- event listeners -------------------- //
 
@@ -80,72 +77,4 @@ btnLiveDemo.forEach((button, index) => {
         window.open('./assets/demoKisarisary.txt');
     });
 });
-
-// Confirmation modal + Formspree send (no mailto fallback)
-const confirmModal = document.getElementById('confirm-modal');
-const confirmName = document.getElementById('confirm-name');
-const confirmEmail = document.getElementById('confirm-email');
-const confirmMessage = document.getElementById('confirm-message');
-const confirmSend = document.getElementById('confirm-send');
-const confirmCancel = document.getElementById('confirm-cancel');
-
-// Replace this with your Formspree form id (e.g. 'mxknpkwr')
-const FORM_ID = 'YOUR_FORMSPREE_FORM_ID';
-
-function openModal() { confirmModal.setAttribute('aria-hidden', 'false'); }
-function closeModal() { confirmModal.setAttribute('aria-hidden', 'true'); }
-
-if (confirmModal) {
-  confirmModal.addEventListener('click', (e) => {
-    if (e.target && e.target.dataset && e.target.dataset.close === 'true') closeModal();
-  });
-}
-
-if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = contactForm.querySelector('#name').value.trim();
-    const email = contactForm.querySelector('#email').value.trim();
-    const message = contactForm.querySelector('#message').value.trim();
-    confirmName.textContent = name || '(no name)';
-    confirmEmail.textContent = email || '(no email)';
-    confirmMessage.textContent = message || '(no message)';
-    openModal();
-  });
-
-  confirmCancel.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
-
-  confirmSend.addEventListener('click', async (e) => {
-    e.preventDefault();
-    if (FORM_ID === 'YOUR_FORMSPREE_FORM_ID') {
-      contactStatus.textContent = "Formspree non configuré. Voir EMAIL_INSTRUCTIONS.md pour l'installer.";
-      closeModal();
-      setTimeout(() => { contactStatus.textContent = ''; }, 6000);
-      return;
-    }
-
-    const submitBtn = contactForm.querySelector('.contact-btn');
-    const formData = new FormData(contactForm);
-    try {
-      submitBtn.disabled = true;
-      contactStatus.textContent = 'Envoi en cours...';
-      const res = await fetch(`https://formspree.io/f/${FORM_ID}`, {
-        method: 'POST', body: formData, headers: { Accept: 'application/json' },
-      });
-      if (res.ok) {
-        contactForm.reset();
-        contactStatus.textContent = 'Message envoyé. Merci !';
-      } else {
-        const data = await res.json();
-        contactStatus.textContent = data?.error || 'Une erreur est survenue.';
-      }
-    } catch (err) {
-      contactStatus.textContent = "Échec de l'envoi. Vérifie ta connexion.";
-    } finally {
-      submitBtn.disabled = false;
-      closeModal();
-      setTimeout(() => { contactStatus.textContent = ''; }, 5000);
-    }
-  });
-}
 
