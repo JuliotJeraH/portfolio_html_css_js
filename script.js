@@ -11,28 +11,15 @@ const btnProject1 = document.querySelector('.btnProject1');
 const btnProject2 = document.querySelector('.btnProject2');
 const btnProject3 = document.querySelector('.btnProject3');
 const btnLiveDemo = document.querySelectorAll('.btnLiveDemo');
+const menuLinks = document.querySelectorAll('.menu-links a');
 
 
 // -------------------- event listeners -------------------- //
 
 hamburgerIcon.addEventListener('click', toggleMenu);
-// close menu when clicking outside or pressing Escape
-document.addEventListener('click', (e) => {
-    if (!menu.classList.contains('open')) return;
-    // don't close when clicking inside the nav or the open menu itself
-    if (!e.target.closest('#hamburger-nav') && !e.target.closest('.menu-links')) {
-        menu.classList.remove('open');
-        hamburgerIcon.classList.remove('open');
-        hamburgerIcon.setAttribute('aria-expanded', 'false');
-    }
-});
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu.classList.contains('open')) {
-        menu.classList.remove('open');
-        hamburgerIcon.classList.remove('open');
-        hamburgerIcon.setAttribute('aria-expanded', 'false');
-    }
-});
+document.addEventListener('click', closeMenuOnClickOutside);
+document.addEventListener('keydown', closeMenuOnClickEscape);
+menuLinks.forEach(a => a.addEventListener('click', handleMenuLinkClick));
 cvBtn.addEventListener('click', openCV);
 contactBtn.addEventListener('click', showContactForm);
 linkedinIcon.addEventListener('click', linkedinProfile);
@@ -53,6 +40,14 @@ function toggleMenu() {
     hamburgerIcon.classList.toggle('open');
     const expanded = hamburgerIcon.getAttribute('aria-expanded') === 'true';
     hamburgerIcon.setAttribute('aria-expanded', String(!expanded));
+}
+
+function handleMenuLinkClick() {
+    if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        hamburgerIcon.classList.remove('open');
+        hamburgerIcon.setAttribute('aria-expanded', 'false');
+    }
 }
 
 function openCV() {
@@ -91,24 +86,60 @@ function githubProject3(){
     location.href = 'https://github.com/JuliotJeraH/VOTE2';
 }
 
-btnLiveDemo.forEach((button, index) => {
+btnLiveDemo.forEach((button)=>{
     button.addEventListener('click', () => {
         window.open('./assets/demoKisarisary.txt');
     });
 });
 
-// close hamburger menu when a link is clicked (mobile)
-document.querySelectorAll('.menu-links a').forEach(a => {
-    a.addEventListener('click', () => {
-        if (menu.classList.contains('open')) {
-            menu.classList.remove('open');
-            hamburgerIcon.classList.remove('open');
-            hamburgerIcon.setAttribute('aria-expanded', 'false');
-        }
-    });
-});
+function closeMenuOnClickOutside(e){
+    if (!menu.classList.contains('open')) return;
+    if (!e.target.closest('#hamburger-nav') && !e.target.closest('.menu-links')) {
+        menu.classList.remove('open');
+        hamburgerIcon.classList.remove('open');
+        hamburgerIcon.setAttribute('aria-expanded', 'false');
+    }
+};
 
-// -------------------- EmailJS contact form -------------------- //
+function closeMenuOnClickEscape(e){
+    if (e.key === 'Escape' && menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        hamburgerIcon.classList.remove('open');
+        hamburgerIcon.setAttribute('aria-expanded', 'false');
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// -------------------- EmailJS contact form ( Bibliothèque fa ts lasa le mesazy rah tsisy an tony kkkk) -------------------- //
 (function () {
     if (window.emailjs) {
         emailjs.init("MDf3DYcSCmpvfsrQ2");
@@ -123,7 +154,6 @@ if (contactForm) {
 
     function validateName(name) {
         const t = name.trim();
-        // Allow letters, accents, spaces, hyphens and apostrophes; minimum 2 chars
         return t.length >= 2 && /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(t);
     }
 
@@ -131,7 +161,6 @@ if (contactForm) {
         const t = msg.trim();
         if (t.length < 10) return false;
         if (t.length > 2000) return false;
-        // reject obvious scripts
         if (/(<script\b[^>]*>)/i.test(t)) return false;
         return true;
     }
@@ -216,7 +245,7 @@ if (contactForm) {
                     submitBtn.textContent = originalText || 'Send';
                     submitBtn.removeAttribute('aria-busy');
                 }
-                // remove success message after a short timeout
+
                 setTimeout(() => {
                     const fb = this.querySelector('.contact-feedback');
                     if (fb) fb.textContent = '';
