@@ -12,13 +12,22 @@ const btnProject2 = document.querySelector('.btnProject2');
 const btnProject3 = document.querySelector('.btnProject3');
 const btnLiveDemo = document.querySelectorAll('.btnLiveDemo');
 const menuLinks = document.querySelectorAll('.menu-links a');
+const aboutSection = document.querySelector('#about');
+const experienceSection = document.querySelector('#experience');
+const projectsSection = document.querySelector('#projects');
+const contactSection = document.querySelector('#contact');
+const profilePic = document.querySelector('.section__pic-container');
+const p1 = document.querySelector('#profile .section__text__p1');
+const h1 = document.querySelector('#profile .title');
+const p2 = document.querySelector('#profile .section__text__p2');
+const socials = document.getElementById('socials-container');
 
 
 // -------------------- event listeners -------------------- //
 
+document.addEventListener('keydown', closeMenuOnClickEscape);
 hamburgerIcon.addEventListener('click', toggleMenu);
 document.addEventListener('click', closeMenuOnClickOutside);
-document.addEventListener('keydown', closeMenuOnClickEscape);
 menuLinks.forEach(a => a.addEventListener('click', handleMenuLinkClick));
 cvBtn.addEventListener('click', openCV);
 contactBtn.addEventListener('click', showContactForm);
@@ -30,6 +39,13 @@ arrow3.addEventListener('click', showContactForm);
 btnProject1.addEventListener('click', githubProject1);
 btnProject2.addEventListener('click', githubProject2);
 btnProject3.addEventListener('click', githubProject3);
+window.addEventListener('load', profilObjectRevealAnimation);
+window.addEventListener('scroll', AboutRevealAnimations);
+window.addEventListener('scroll', ExperienceRevealAnimations);
+window.addEventListener('scroll', ProjectsRevealAnimations);
+window.addEventListener('scroll', ContactRevealAnimations);
+window.addEventListener('scroll', profilObjectRevealAnimation);
+
 
 
 
@@ -108,6 +124,53 @@ function closeMenuOnClickEscape(e){
         hamburgerIcon.setAttribute('aria-expanded', 'false');
     }
 };
+
+
+
+function AboutRevealAnimations(){
+    if (window.scrollY > 120) {
+        aboutSection.classList.add('active');
+    } else {
+        aboutSection.classList.remove('active');
+    }
+}
+
+function ExperienceRevealAnimations(){
+    if (window.scrollY > 800) {
+        experienceSection.classList.add('active');
+    } else {
+        experienceSection.classList.remove('active');
+    }
+}
+
+function ProjectsRevealAnimations(){
+    if (window.scrollY > 1400) {
+        projectsSection.classList.add('active');
+    } else {
+        projectsSection.classList.remove('active');
+    }
+}
+
+function ContactRevealAnimations(){
+    if (window.scrollY > 2200) {
+        contactSection.classList.add('active');
+    } else {
+        contactSection.classList.remove('active');
+    }
+}
+
+function profilObjectRevealAnimation(){
+    profilePic.classList.add('active');
+    p1.classList.add('active');
+    h1.classList.add('active');
+    p2.classList.add('active');
+    cvBtn.classList.add('active');
+    contactBtn.classList.add('active');
+    socials.classList.add('active');
+}
+
+
+
 
 
 
