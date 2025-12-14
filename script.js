@@ -16,6 +16,23 @@ const btnLiveDemo = document.querySelectorAll('.btnLiveDemo');
 // -------------------- event listeners -------------------- //
 
 hamburgerIcon.addEventListener('click', toggleMenu);
+// close menu when clicking outside or pressing Escape
+document.addEventListener('click', (e) => {
+    if (!menu.classList.contains('open')) return;
+    // don't close when clicking inside the nav or the open menu itself
+    if (!e.target.closest('#hamburger-nav') && !e.target.closest('.menu-links')) {
+        menu.classList.remove('open');
+        hamburgerIcon.classList.remove('open');
+        hamburgerIcon.setAttribute('aria-expanded', 'false');
+    }
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        hamburgerIcon.classList.remove('open');
+        hamburgerIcon.setAttribute('aria-expanded', 'false');
+    }
+});
 cvBtn.addEventListener('click', openCV);
 contactBtn.addEventListener('click', showContactForm);
 linkedinIcon.addEventListener('click', linkedinProfile);
@@ -33,7 +50,9 @@ btnProject3.addEventListener('click', githubProject3);
 // -------------------- all functions -------------------- //
 function toggleMenu() {
     menu.classList.toggle('open');
-    icon.classList.toggle('open');
+    hamburgerIcon.classList.toggle('open');
+    const expanded = hamburgerIcon.getAttribute('aria-expanded') === 'true';
+    hamburgerIcon.setAttribute('aria-expanded', String(!expanded));
 }
 
 function openCV() {
@@ -75,6 +94,17 @@ function githubProject3(){
 btnLiveDemo.forEach((button, index) => {
     button.addEventListener('click', () => {
         window.open('./assets/demoKisarisary.txt');
+    });
+});
+
+// close hamburger menu when a link is clicked (mobile)
+document.querySelectorAll('.menu-links a').forEach(a => {
+    a.addEventListener('click', () => {
+        if (menu.classList.contains('open')) {
+            menu.classList.remove('open');
+            hamburgerIcon.classList.remove('open');
+            hamburgerIcon.setAttribute('aria-expanded', 'false');
+        }
     });
 });
 
