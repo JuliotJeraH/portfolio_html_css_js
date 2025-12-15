@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu des lettres - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Jeu des Lettres</h1>
+
+    <p class="instructions">
+        Trouve le mot le plus long possible avec ces lettres :
+    </p>
+
+    <div id="letters" class="letters"></div>
+
+    <div class="timer">
+        Temps restant : <span id="time">60</span> s
+    </div>
+
+    <input type="text" id="wordInput" placeholder="Entre ton mot">
+    <button id="validateBtn">Valider</button>
+
+    <p id="result"></p>
+    <p id="score">Score : 0</p>
+
+    <h3>Historique des scores</h3>
+    <ul id="history"></ul>
+
+    <button id="restartBtn">Rejouer</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
